@@ -2,7 +2,10 @@
 
 namespace App\Http\Requests\Auth;
 
+use App\Helper\ApiResponse;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class LoginRequest extends FormRequest
 {
@@ -25,5 +28,12 @@ class LoginRequest extends FormRequest
             'email' => 'required|string|email|max:255',
             'password' => 'required|string|min:8',
         ];
+    }
+
+     protected function failedValidation(Validator $validator)
+    {
+        throw new HttpResponseException(
+            ApiResponse::error($validator->errors()->first())
+        );
     }
 }

@@ -2,7 +2,11 @@
 
 namespace App\Http\Requests\Expense;
 
+use App\Helper\ApiResponse;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
+
 
 class ExpenseRequest extends FormRequest
 {
@@ -28,5 +32,12 @@ class ExpenseRequest extends FormRequest
             'group_id' => 'required|exists:groups,id',
             
         ];
+    }
+
+    protected function failedValidation(Validator $validator)
+    {
+        throw new HttpResponseException(
+            ApiResponse::error($validator->errors()->first())
+        );
     }
 }

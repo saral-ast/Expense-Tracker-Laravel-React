@@ -2,8 +2,10 @@
 
 namespace App\Http\Requests\Group;
 
+use App\Helper\ApiResponse;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
-
+use Illuminate\Http\Exceptions\HttpResponseException;
 class GrupRequest extends FormRequest
 {
     /**
@@ -25,5 +27,11 @@ class GrupRequest extends FormRequest
             'name' => 'required|string|max:255',
             // 'user_id' => 'required|exists:users,id',
         ];
+    }
+    protected function failedValidation(Validator $validator)
+    {
+        throw new HttpResponseException(
+            ApiResponse::error($validator->errors()->first())
+        );
     }
 }
