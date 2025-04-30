@@ -1,13 +1,15 @@
-import './index.css'
+import { BrowserRouter } from "react-router";
+import "./index.css";
+import router from "./routes/router";
 
 function App() {
   // const [count, setCount] = useState(0)
 
   return (
     <>
-       <h1 className='text-3xl'>Hello World</h1>
-          </>
-  )
+      <BrowserRouter router={router} />
+    </>
+  );
 }
 
-export default App
+export default App;

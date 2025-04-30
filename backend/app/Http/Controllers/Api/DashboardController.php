@@ -20,12 +20,17 @@ class DashboardController extends Controller
             ->whereMonth('date', date('m'))
             ->whereYear('date', date('Y'))
             ->sum('amount');
+            $recentExpenses = auth()->user()->expenses()
+            ->orderBy('created_at', 'desc')
+            ->take(5)
+            ->get();
             
 
           return  ApiResponse::success([
                 'total_expenses' => $totalExpenses,
                 'highest_expense' => $highestExpense->amount,
-                'total_this_month' => $totalthisMonth
+                'total_this_month' => $totalthisMonth,
+                'recent_expenses' => ExpenseResource::collection($recentExpenses)
             ], 'Dashboard data fetched successfully');
         } catch (Exception $e) {
             return ApiResponse::error($e->getMessage());
