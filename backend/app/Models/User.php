@@ -19,7 +19,7 @@ class User extends Authenticatable
      *
      * @var list<string>
      */
-    protected $guarder = [];
+    protected $guarded = [];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -49,4 +49,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(Group::class);
     }
+
+     public function expenses()
+    {
+        return $this->hasMany(Expense::class);
+    }
+    
 }

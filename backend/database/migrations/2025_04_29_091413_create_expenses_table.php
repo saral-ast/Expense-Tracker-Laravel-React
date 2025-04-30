@@ -16,7 +16,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('amount');
-            $table->string('date');
+            $table->date('date');
             $table->foreignIdFor(Group::class, 'group_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
