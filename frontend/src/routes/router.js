@@ -4,6 +4,7 @@ import AuthLayout from "../layout/AuthLayout";
 import SignUp from "../pages/Auth/SignUp";
 import Dahboard from "../pages/Dahboard";
 import Login from "../pages/Auth/Login";
+import Group from "../pages/Group";
 
 const router = createBrowserRouter([
   {
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
         path: "/",
         Component: Dahboard,
       },
+      {
+          path: "/groups",
+          Component: Group,
+      }
     ],
   },
 ]);

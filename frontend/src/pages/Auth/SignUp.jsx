@@ -1,16 +1,14 @@
 import React from "react";
 import { useForm } from "react-hook-form";
+import { NavLink, useNavigate } from "react-router";
+import { useDispatch } from "react-redux";
+import { registerUser } from "../../features/auth/authSLice";
 import Input from "../../component/Input";
 import Button from "../../component/Button";
-import { Link, useNavigate } from "react-router";
-import { useDispatch, useSelector } from "react-redux";
-import { registerUser } from "../../features/auth/authSLice";
 
 const SignUp = () => {
-   const dispatch = useDispatch();
-  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
- 
   const {
     register,
     handleSubmit,
@@ -18,24 +16,27 @@ const SignUp = () => {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
-    console.log("Form Submitted:", data);
-    dispatch(registerUser(data));
-    if (isLoggedIn) {
-      navigate("/");
-    }
-
-  };
-
   const password = watch("password");
 
+  const onSubmit = async (data) => {
+    try {
+      await dispatch(registerUser(data)).unwrap();
+      navigate("/");
+    } catch (error) {
+      console.error("Registration failed:", error);
+    }
+  };
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="bg-white shadow-lg rounded-xl p-8 w-full max-w-md"
+        className="bg-white shadow-lg border border-gray-100 rounded-2xl p-8 w-full max-w-md space-y-6"
+        noValidate
       >
-        <h2 className="text-2xl font-semibold text-center mb-6">Sign Up</h2>
+        <h2 className="text-3xl font-bold text-center text-indigo-600">
+          Create Account
+        </h2>
 
         <Input
           label="Full Name"
@@ -46,6 +47,7 @@ const SignUp = () => {
           })}
           error={errors.name}
         />
+
         <Input
           label="Email"
           name="email"
@@ -60,6 +62,7 @@ const SignUp = () => {
           })}
           error={errors.email}
         />
+
         <Input
           label="Password"
           name="password"
@@ -69,11 +72,12 @@ const SignUp = () => {
             required: "Password is required",
             minLength: {
               value: 6,
-              message: "Password must be at least 6 characters",
+              message: "Minimum 6 characters",
             },
           })}
           error={errors.password}
         />
+
         <Input
           label="Confirm Password"
           name="password_confirmation"
@@ -86,15 +90,21 @@ const SignUp = () => {
           error={errors.password_confirmation}
         />
 
-        <Button type="submit" className="w-full mt-4">
-          Create Account
+        <Button
+          type="submit"
+          className="w-full bg-indigo-600 text-white hover:bg-indigo-700 transition"
+        >
+          Sign Up
         </Button>
 
-        <p className="text-center text-sm text-gray-500 mt-3">
+        <p className="text-center text-sm text-gray-600">
           Already have an account?{" "}
-          <Link to="/login" className="text-blue-600 hover:underline">
+          <NavLink
+            to="/login"
+            className="text-indigo-600 font-medium hover:underline"
+          >
             Login
-          </Link>
+          </NavLink>
         </p>
       </form>
     </div>

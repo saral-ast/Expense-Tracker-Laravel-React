@@ -1,36 +1,39 @@
 import React from "react";
 import { useForm } from "react-hook-form";
+import { NavLink, useNavigate } from "react-router"; // Corrected import
+import { useDispatch } from "react-redux";
+import { loginUser } from "../../features/auth/authSLice";
 import Input from "../../component/Input";
 import Button from "../../component/Button";
-import { Link, useNavigate } from "react-router";
-import { useDispatch, useSelector } from "react-redux";
-import { loginUser } from "../../features/auth/authSLice";
 
 const Login = () => {
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
-    console.log("Form Submitted:", data);
-    dispatch(loginUser(data));
-    navigate("/");  
+  const onSubmit = async (data) => {
+    try {
+     dispatch(loginUser(data));
+      navigate("/");
+    } catch (error) {
+      console.error("Login failed:", error);
+    }
   };
 
-  const password = watch("password");
-
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4 sm:px-6 lg:px-8">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="bg-white shadow-lg rounded-xl p-8 w-full max-w-md"
+        className="bg-white shadow-lg border border-gray-100 rounded-2xl p-8 w-full max-w-md space-y-6"
+        noValidate
       >
-        <h2 className="text-2xl font-semibold text-center mb-6">Login</h2>
+        <h2 className="text-3xl font-bold text-center text-indigo-600">
+          Welcome Back
+        </h2>
 
         <Input
           label="Email"
@@ -46,6 +49,7 @@ const Login = () => {
           })}
           error={errors.email}
         />
+
         <Input
           label="Password"
           name="password"
@@ -61,15 +65,21 @@ const Login = () => {
           error={errors.password}
         />
 
-        <Button type="submit" className="w-full mt-4">
+        <Button
+          type="submit"
+          className="w-full bg-indigo-600 text-white hover:bg-indigo-700 transition"
+        >
           Login
         </Button>
 
-        <p className="text-center text-sm text-gray-500 mt-3">
+        <p className="text-center text-sm text-gray-600">
           Don't have an account?{" "}
-          <Link to="/signup" className="text-blue-600 hover:underline">
-            SignUp
-          </Link>
+          <NavLink
+            to="/signup"
+            className="text-indigo-600 font-medium hover:underline"
+          >
+            Sign Up
+          </NavLink>
         </p>
       </form>
     </div>

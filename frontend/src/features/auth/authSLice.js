@@ -19,7 +19,9 @@ export const loginUser = createAsyncThunk("auth/login", async (data) => {
 
 export const logoutUser = createAsyncThunk("auth/logout", async () => {
   const response = await logoutApi();
-  return response.data;
+  cookies.remove("token");
+  cookies.remove("user");
+  return response.data.message;
 });
 
 // export const loginUser =
@@ -44,7 +46,6 @@ const authSlice = createSlice({
 
     builder.addCase(registerUser.fulfilled, (state, action) => {
       state.loading = false;
-      state.user = action.payload;
       state.isLoggedIn = true;
     });
 
@@ -71,6 +72,8 @@ const authSlice = createSlice({
     builder.addCase(logoutUser.fulfilled, (state, action) => {
       state.loading = false;
       state.isLoggedIn = false;
+       cookies.remove("token");
+       cookies.remove("user");
     });
     builder.addCase(logoutUser.rejected, (state, action) => {
       state.loading = false;
