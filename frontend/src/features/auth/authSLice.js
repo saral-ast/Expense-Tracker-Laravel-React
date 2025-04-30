@@ -1,24 +1,24 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { login, logout, register } from "../../service/api";
+import { loginApi, logoutApi, registerApi } from "../../service/api";
 import { Cookies } from "react-cookie";
 
 
 const cookies = new Cookies();
 
 export const registerUser = createAsyncThunk("auth/register", async (data) => {
-  const { name, email, password } = data;
-  const response = await register(name, email, password);
+  const { name, email, password, password_confirmation } = data;
+  const response = await registerApi(name, email, password, password_confirmation);
   return response.data.data;
 });
 
 export const loginUser = createAsyncThunk("auth/login", async (data) => {
   const { email, password } = data;
-  const response = await login(email, password);
+  const response = await loginApi(email, password);
   return response.data.data;
 });
 
 export const logoutUser = createAsyncThunk("auth/logout", async () => {
-  const response = await logout();
+  const response = await logoutApi();
   return response.data;
 });
 
@@ -34,15 +34,7 @@ const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    register: (state) => {
-      state.isLoggedIn = true;
-    },
-    login: (state) => {
-      state.isLoggedIn = true;
-    },
-    logout: (state) => {
-      state.isLoggedIn = false;
-    },
+   
   },
   extraReducers: (builder) => {
     builder.addCase(registerUser.pending, (state) => {
@@ -53,7 +45,7 @@ const authSlice = createSlice({
     builder.addCase(registerUser.fulfilled, (state, action) => {
       state.loading = false;
       state.user = action.payload;
-      state.register();
+      state.isLoggedIn = true;
     });
 
     builder.addCase(registerUser.rejected, (state, action) => {
@@ -68,7 +60,7 @@ const authSlice = createSlice({
     });
     builder.addCase(loginUser.fulfilled, (state, action) => {
       state.loading = false;
-      state.login();
+      state.isLoggedIn = true;
     });
 
 
@@ -78,7 +70,7 @@ const authSlice = createSlice({
     });
     builder.addCase(logoutUser.fulfilled, (state, action) => {
       state.loading = false;
-      state.logout();
+      state.isLoggedIn = false;
     });
     builder.addCase(logoutUser.rejected, (state, action) => {
       state.loading = false;

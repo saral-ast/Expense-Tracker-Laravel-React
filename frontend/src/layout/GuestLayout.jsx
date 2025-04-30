@@ -10,7 +10,7 @@ function GuestLayout() {
       <Outlet />
     </>
   ) : (
-    <Navigate to="/dashboard" />
+    <Navigate to="/" />
   );
 }
 

@@ -1,4 +1,4 @@
-import { BrowserRouter } from "react-router";
+import { BrowserRouter, RouterProvider } from "react-router";
 import "./index.css";
 import router from "./routes/router";
 
@@ -7,7 +7,7 @@ function App() {
 
   return (
     <>
-      <BrowserRouter router={router} />
+      <RouterProvider router={router} />
     </>
   );
 }
