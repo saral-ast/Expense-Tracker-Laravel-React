@@ -19,7 +19,7 @@ class ExpenseResource extends JsonResource
             'name' => $this->name,
             'amount' => $this->amount,
             'date' => $this->date,
-            'group_id' => $this->group_id,
+            // 'group_id' => $this->group_id,
             'group' => new GroupResource($this->whenLoaded('group')),
         ];
     }

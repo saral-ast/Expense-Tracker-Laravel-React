@@ -17,7 +17,7 @@ class ExpenseController extends Controller
             //code...
             // $groups = auth()->user()->groups();
             // $expenses = $groups->expenses;
-             $expenses = auth()->user()->expenses()->get();
+             $expenses = auth()->user()->expenses()->with('group')->get();
             
             return ApiResponse::success([
                 'expenses'=> ExpenseResource::collection($expenses)
