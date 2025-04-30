@@ -70,6 +70,18 @@ const Navbar = () => {
                 >
                   Groups
                 </NavLink>
+                <NavLink
+                  to="/expenses"
+                  className={({ isActive }) =>
+                    `text-sm font-medium px-3 py-2 rounded-md transition ${
+                      isActive
+                        ? "text-white bg-indigo-700"
+                        : "text-gray-700 hover:text-indigo-700 hover:bg-indigo-50"
+                    }`
+                  }
+                >
+                  Expenses
+                </NavLink>
                 <button
                   onClick={handleLogout}
                   className="bg-white  text-red-600 hover:bg-red-500 hover:text-white px-4 py-2 rounded-md text-sm font-medium transition"

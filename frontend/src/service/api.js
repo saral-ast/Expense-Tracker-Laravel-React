@@ -40,16 +40,30 @@ api.interceptors.response.use(
   }
 );
 
+// Auth Api
 export const registerApi = async (
   name,
   email,
   password,
   password_confirmation
 ) => api.post("/register", { name, email, password, password_confirmation });
-
 export const loginApi = async (email, password) =>
   api.post("/login", { email, password });
-
 export const logoutApi = async () => api.delete("/logout");
 
+//Groups Api
+export const getGroupsApi = async () => api.get("/groups");
+export const createGroupApi = async (name) => api.post("/groups", { name });
+export const updateGroupApi = async (id, name) => api.post(`/groups/${id}`, { name });
+export const deleteGroupApi = async (id) => api.delete(`/groups/${id}`);
+
+//Expenses Api
+export const getExpensesApi = async () => api.get("/expenses");
+export const createExpenseApi = async (name, amount, date, group_id) =>
+  api.post("/expenses", { name, amount, date, group_id });
+export const updateExpenseApi = async (id, name, amount, date, group_id) =>
+  api.post(`/expenses/${id}`, { name, amount, date, group_id });
+export const deleteExpenseApi = async (id) => api.delete(`/expenses/${id}`);
+
+// Dashboard Api
 export const dashboardApi = async () => api.get("/dashboard");

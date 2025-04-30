@@ -59,7 +59,7 @@ class GroupController extends Controller
             //code...
             $group = auth()->user()->groups()->findOrFail($id);
             $group->delete();
-            return ApiResponse::success([], 'Group deleted successfully');
+            return ApiResponse::success(['id' => $id], 'Group deleted successfully');
          } catch (Exception $e) {
              //throw $th;
              return ApiResponse::error($e->getMessage());

@@ -5,6 +5,7 @@ import SignUp from "../pages/Auth/SignUp";
 import Dahboard from "../pages/Dahboard";
 import Login from "../pages/Auth/Login";
 import Group from "../pages/Group";
+import Expense from "../pages/Expense";
 
 const router = createBrowserRouter([
   {
@@ -30,6 +31,10 @@ const router = createBrowserRouter([
       {
           path: "/groups",
           Component: Group,
+      },
+      {
+          path: "/expenses",
+          Component:Expense,
       }
     ],
   },
