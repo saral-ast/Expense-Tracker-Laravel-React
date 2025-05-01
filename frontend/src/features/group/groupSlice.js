@@ -58,8 +58,8 @@ export const deleteGroup = createAsyncThunk(
 );
 
 const initialState = {
-  groups: [],
-  group: null,
+  groups: [], 
+  group: [],
   loading: false,
   error: null,
 };
@@ -97,6 +97,7 @@ const groupSlice = createSlice({
 
     builder.addCase(addGroup.fulfilled, (state, action) => {
       state.loading = false;
+    
       state.groups.push(action.payload.group);
     });
 
