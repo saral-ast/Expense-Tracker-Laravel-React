@@ -34,11 +34,10 @@ const ExpenseModal = ({ isOpen, onClose, expense = null }) => {
 
   // Fetch groups when modal opens
   useEffect(() => {
-    console.log("ExpenseModal useEffect", isOpen, groups.length);
     if (isOpen && groups.length === 0) {
       dispatch(getGroups());
     }
-  }, [isOpen, dispatch, groups.length]);
+  }, [isOpen, dispatch]);
 
   // Reset form when modal opens or expense changes
   useEffect(() => {

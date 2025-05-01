@@ -24,10 +24,38 @@ export const updateGroup = createAsyncThunk(
   }
 );
 
-export const deleteGroup = createAsyncThunk("group/deleteGroup", async (id) => {
-  const response = await deleteGroupApi(id);
-  return response.data.data;
-});
+export const deleteGroup = createAsyncThunk(
+  "group/deleteGroup",
+  async (id, { dispatch, getState }) => {
+    const response = await deleteGroupApi(id);
+    
+    // After successful deletion, filter out related expenses from the state
+    const state = getState();
+    const expenses = state.expense.expenses;
+    const relatedExpenseIds = expenses
+      .filter(expense => expense.group && expense.group.id === parseInt(id))
+      .map(expense => expense.id);
+    
+    // Dispatch actions to update the expense state
+    relatedExpenseIds.forEach(expenseId => {
+      // We're only updating the state, not making API calls
+      dispatch({ 
+        type: 'expense/deleteExpense/fulfilled', 
+        payload: { id: expenseId } 
+      });
+      
+      // Also update dashboard state if needed
+      if (state.dashboard && state.dashboard.recentExpenses) {
+        dispatch({
+          type: 'dashboard/expenseDeleted',
+          payload: { id: expenseId }
+        });
+      }
+    });
+    
+    return response.data.data;
+  }
+);
 
 const initialState = {
   groups: [],
@@ -97,11 +125,8 @@ const groupSlice = createSlice({
       state.loading = false;
       // Filter out the deleted group from the state using the id from the response
       state.groups = state.groups.filter((group) => (
-  
         group.id !== parseInt(action.payload.id)
       ));
-      // console.log(action.payload.id);
-      // console.log('group', state.groups);
     });
 
     builder.addCase(deleteGroup.rejected, (state, action) => {

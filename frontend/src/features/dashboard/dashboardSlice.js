@@ -22,9 +22,44 @@ const initialState = {
 };
 
 const dashboardSlice = createSlice({
-  name: "auth",
+  name: "dashboard", // Fixed the name to match the slice
   initialState,
-  reducers: {},
+  reducers: {
+    // Add a custom reducer to handle expense deletion from group deletion
+    expenseDeleted: (state, action) => {
+      const deletedId = parseInt(action.payload.id);
+      
+      // Find the expense in recentExpenses
+      const index = state.recentExpenses.findIndex(exp => exp.id === deletedId);
+      
+      if (index !== -1) {
+        const deletedExpense = state.recentExpenses[index];
+        const amount = parseFloat(deletedExpense.amount);
+        
+        // Update total expenses
+        state.totalExpenses -= amount;
+        
+        // Check if expense is from current month and update totalThisMonth
+        const currentDate = new Date();
+        const expenseDate = new Date(deletedExpense.date);
+        if (expenseDate.getMonth() === currentDate.getMonth() && 
+            expenseDate.getFullYear() === currentDate.getFullYear()) {
+          state.totalThisMonth -= amount;
+        }
+        
+        // Remove from recent expenses
+        state.recentExpenses = state.recentExpenses.filter(exp => exp.id !== deletedId);
+        
+        // Recalculate highest expense if needed
+        if (amount === state.highestExpense) {
+          // Find the new highest expense
+          state.highestExpense = state.recentExpenses.reduce(
+            (max, exp) => Math.max(max, parseFloat(exp.amount)), 0
+          );
+        }
+      }
+    }
+  },
   extraReducers: (builder) => {
     builder.addCase(getDashboard.pending, (state) => {
       state.loading = true;
@@ -151,9 +186,11 @@ const dashboardSlice = createSlice({
         }
       }
     });
-},
+  },
 });
 
+// Export the custom reducer action
+export const { expenseDeleted } = dashboardSlice.actions;
 export default dashboardSlice.reducer;
 
 
