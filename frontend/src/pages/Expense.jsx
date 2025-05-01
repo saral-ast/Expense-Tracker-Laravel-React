@@ -45,7 +45,7 @@ const Expense = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
+    <div className="bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto relative">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold text-indigo-600">
@@ -73,7 +73,7 @@ const Expense = () => {
         </div>
 
         {isLoading && (
-          <div className="flex justify-center items-center h-screen">
+          <div className="flex justify-center items-center h-64">
             <div className="flex flex-col items-center">
               <div className="w-12 h-12 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
               <p className="mt-3 text-base text-gray-600 font-medium">

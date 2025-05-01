@@ -34,6 +34,7 @@ class ExpenseController extends Controller
             $validated = $request->validated();
             $validated['user_id'] = auth()->user()->id;
             $expense = auth()->user()->expenses()->create($validated);
+            $expense->load('group');
             return ApiResponse::success([
                 'expense' => ExpenseResource::make($expense)
             ], 'Expense created successfully');

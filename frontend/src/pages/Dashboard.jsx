@@ -35,15 +35,19 @@ const Dashboard = () => {
   const loading = dashboardLoading || expenseLoading || groupLoading;
 
   useEffect(() => {
-    // Fetch all required data
-    dispatch(getDashboard());
+    // Only fetch dashboard data if we don't have any data yet
+    if (totalExpenses === 0 && !recentExpenses.length) {
+      dispatch(getDashboard());
+    }
+    
     if (!expenses.length) {
       dispatch(getExpenses());
     }
+    
     if (!groups.length) {
       dispatch(getGroups());
     }
-  }, [dispatch]);
+  }, [dispatch, totalExpenses, recentExpenses.length, expenses.length, groups.length]);
 
   const handleSort = (key) => {
     setSortConfig((prev) => ({
