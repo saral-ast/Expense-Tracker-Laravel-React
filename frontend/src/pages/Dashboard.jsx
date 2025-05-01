@@ -47,7 +47,8 @@ const Dashboard = () => {
     if (!groups.length) {
       dispatch(getGroups());
     }
-  }, [dispatch, totalExpenses, recentExpenses.length, expenses.length, groups.length]);
+    // Remove the problematic dependencies that cause re-renders
+  }, [dispatch]);
 
   const handleSort = (key) => {
     setSortConfig((prev) => ({
