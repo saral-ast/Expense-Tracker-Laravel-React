@@ -29,6 +29,7 @@ class DashboardController extends Controller
                 ->orderBy('created_at', 'desc')
                 ->take(5)
                 ->get() ?? [];
+            $recentExpenses->load('group');
             
             return ApiResponse::success([
                 'total_expenses' => $totalExpenses,

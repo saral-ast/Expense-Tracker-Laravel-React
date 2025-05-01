@@ -6,7 +6,7 @@ import { getGroups } from "../features/group/groupSlice";
 import ExpenseDistributionChart from "../component/charts/ExpenseDistributionChart";
 import MonthlyExpenseChart from "../component/charts/MonthlyExpenseChart";
 import TopExpensesChart from "../component/charts/TopExpensesChart";
-
+import ExportButton from "../component/ExportButton";
 
 const Dashboard = () => {
 
@@ -103,7 +103,12 @@ const Dashboard = () => {
         </h1>
 
         {/* Summary Cards */}
-      
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-2xl font-semibold text-gray-800">Dashboard</h1>
+          <ExportButton filters={{}} />{" "}
+          {/* You can pass filters here if needed */}
+        </div>
+
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
           {/* Total Expenses */}
           <div className="p-6 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200">

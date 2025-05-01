@@ -83,6 +83,37 @@ export const deleteExpenseApi = async (id) => api.delete(`/expenses/${id}`);
 // Dashboard Api
 export const dashboardApi = async () => api.get("/dashboard");
 
+// In service/api.js
 
+// Add this with your other API functions
+export const exportExpensesCSV = async (filters = {}) => {
+  const queryParams = new URLSearchParams();
+  
+  // Add any filters to the query parameters
+  if (filters.userId) queryParams.append('user_id', filters.userId);
+  if (filters.groupId) queryParams.append('group_id', filters.groupId);
+  if (filters.startDate) queryParams.append('start_date', filters.startDate);
+  if (filters.endDate) queryParams.append('end_date', filters.endDate);
+  
+  const queryString = queryParams.toString() ? `?${queryParams.toString()}` : '';
+  
+  return api.get(`/expenses/export${queryString}`);
+};
+
+export const exportExpensesPDF = async (filters = {}) => {
+  const queryParams = new URLSearchParams();
+
+  // Add any filters to the query parameters
+  if (filters.userId) queryParams.append("user_id", filters.userId);
+  if (filters.groupId) queryParams.append("group_id", filters.groupId);
+  if (filters.startDate) queryParams.append("start_date", filters.startDate);
+  if (filters.endDate) queryParams.append("end_date", filters.endDate);
+
+  const queryString = queryParams.toString()
+    ? `?${queryParams.toString()}`
+    : "";
+
+  return api.get(`/expenses/export-pdf${queryString}`);
+};
 // Export Api
 // export const getApi = async () => api.get('/expnses/export');

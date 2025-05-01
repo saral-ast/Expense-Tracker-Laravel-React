@@ -39,5 +39,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/expenses/{id}',[ExpenseController::class, 'update'])->name('expenses.update');
     Route::delete('/expenses/{id}',[ExpenseController::class, 'destroy'])->name('expenses.destroy');
 
-    // Route::get('/expenses/export', [ExpenseController::class, 'exportCsv'])->name('expenses.export');
+    Route::get('/expenses/export', [ExpenseController::class, 'exportCsv'])->name('expenses.export');
+    Route::get('/expenses/export-pdf', [ExpenseController::class, 'exportPdf'])->name('expenses.export-pdf');
 });

@@ -23,7 +23,7 @@ const Group = () => {
 
   useEffect(() => {
     if (!groups.length) {
-    dispatch(getGroups());
+      dispatch(getGroups());
     }
   }, [dispatch]);
 
