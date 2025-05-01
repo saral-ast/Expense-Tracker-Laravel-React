@@ -19,7 +19,7 @@ const Expense = () => {
   const [selectedExpense, setSelectedExpense] = useState(null);
 
   useEffect(() => {
-    if (expenses.length === 0) {
+    if (!expenses.length) {
     dispatch(getExpenses());
     }
   }, [dispatch]);

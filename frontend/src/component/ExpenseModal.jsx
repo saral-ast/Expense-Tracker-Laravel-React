@@ -34,7 +34,7 @@ const ExpenseModal = ({ isOpen, onClose, expense = null }) => {
 
   // Fetch groups when modal opens
   useEffect(() => {
-    if (isOpen && groups.length === 0) {  
+    if (isOpen && groups.length === 0) {
       dispatch(getGroups());
     }
   }, [isOpen, dispatch]);

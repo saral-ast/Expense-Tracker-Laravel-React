@@ -81,28 +81,27 @@ class ExpenseController extends Controller
     }
 
      public function exportCsv(Request $request)
-        {
-            // Get the authenticated user's ID
-            $userId = auth()->id();
-            
-            // Get group ID from request if available
-            $groupId = $request->input('group_id');
-            
-            $fileName = 'expenses-' . now()->format('Y-m-d') . '.csv';
+    {
+        $fileName = 'expenses-' . now()->format('Y-m-d') . '.csv';
             $csvPath = 'csv/' . $fileName;
-            
-            // Pass the authenticated user's ID to ExpensesExport
-            Excel::store(new ExpensesExport($userId, $groupId), $csvPath, 'public');
+            Excel::store(new ExpensesExport(), $csvPath, 'public');
 
             return response()->json([
                 'success' => true,
                 'file_url' => asset('storage/' . $csvPath)
             ]);
-        }
-    public function exportPdf(Request $request)
-    {
+        
+        // return Excel::download(new ExpensesExport($userId, $groupId), 'expenses.csv');
+    }
+
+
+ 
+
+
+public function exportPdf(Request $request)
+{
     try {
-        $expenses = auth()->user()->expenses()->with('group')->get() ?? [];
+        $expenses = auth()->user()->expenses()->with('group')->get();
         $totalAmount = $expenses->sum('amount');
 
         $pdf = Pdf::loadView('expenses.pdf', [
@@ -120,7 +119,7 @@ class ExpenseController extends Controller
             'message' => $e->getMessage()
         ], 500);
     }
-    }
+}
 
 
 }

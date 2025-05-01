@@ -41,7 +41,7 @@ export const deleteExpense = createAsyncThunk(
 
 const initialState = {
   expenses: [],
-  expense: [],
+  expense: null,
   loading: false,
   error: null,
 };
@@ -79,9 +79,6 @@ const expenseSlice = createSlice({
 
     builder.addCase(addExpense.fulfilled, (state, action) => {
       state.loading = false;
-      if (state.expenses === null) {
-        state.expenses = []; // Initialize expenses as an empty array if it was null
-      }
       state.expenses.push(action.payload.expense);
     });
 

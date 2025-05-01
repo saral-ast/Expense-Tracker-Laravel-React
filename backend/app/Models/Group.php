@@ -10,7 +10,6 @@ class Group extends Model
     /** @use HasFactory<\Database\Factories\GroupFactory> */
     use HasFactory;
     protected $guarded = [];
-    
 
     public function user()
     {

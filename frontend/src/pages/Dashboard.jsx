@@ -38,17 +38,15 @@ const Dashboard = () => {
 
   useEffect(() => {
     // Only fetch dashboard data if we don't have any data yet
-      if(totalExpenses === 0 && !recentExpenses.length) {
-        console.log("Fetching dashboard data..." , totalExpenses, recentExpenses, highestExpense, totalThisMonth);
-        dispatch(getDashboard());
-      }
-
+    if (totalExpenses === 0 && !recentExpenses.length) {
+      dispatch(getDashboard());
+    }
     
-    if (!expenses) {
+    if (!expenses.length) {
       dispatch(getExpenses());
     }
     
-    if (!groups) {
+    if (!groups.length) {
       dispatch(getGroups());
     }
     // Remove the problematic dependencies that cause re-renders
