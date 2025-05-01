@@ -7,7 +7,9 @@ import ExpenseDistributionChart from "../component/charts/ExpenseDistributionCha
 import MonthlyExpenseChart from "../component/charts/MonthlyExpenseChart";
 import TopExpensesChart from "../component/charts/TopExpensesChart";
 
+
 const Dashboard = () => {
+
   const dispatch = useDispatch();
   const [sortConfig, setSortConfig] = useState({
     key: "date",
@@ -92,6 +94,7 @@ const Dashboard = () => {
     );
   }
 
+  
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
@@ -100,6 +103,7 @@ const Dashboard = () => {
         </h1>
 
         {/* Summary Cards */}
+      
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
           {/* Total Expenses */}
           <div className="p-6 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200">
