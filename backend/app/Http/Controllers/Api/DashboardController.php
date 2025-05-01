@@ -14,30 +14,30 @@ class DashboardController extends Controller
     {
         try {
             // ApiResponse::error('Method not implemented');
-            $totalExpenses = auth()->user()->expenses()->sum('amount');
-            $highestExpense = auth()->user()->expenses()->orderBy('amount', 'desc')->first();
-             $totalthisMonth = auth()->user()->expenses()
-            ->whereMonth('date', date('m'))
-            ->whereYear('date', date('Y'))
-            ->sum('amount');
-            $recentExpenses = auth()->user()->expenses()
-            ->orderBy('created_at', 'desc')
-            ->take(5)
-            ->get();
+            $totalExpenses = auth()->user()->expenses()->sum('amount') ?? 0;
             
-
-          return  ApiResponse::success([
+            // Get the highest expense properly
+            $highestExpense = auth()->user()->expenses()->orderBy('amount', 'desc')->first();
+            $highestExpenseAmount = $highestExpense ? $highestExpense->amount : 0;
+            
+            $totalthisMonth = auth()->user()->expenses()
+                ->whereMonth('date', date('m'))
+                ->whereYear('date', date('Y'))
+                ->sum('amount') ?? 0;
+                
+            $recentExpenses = auth()->user()->expenses()
+                ->orderBy('created_at', 'desc')
+                ->take(5)
+                ->get() ?? [];
+            
+            return ApiResponse::success([
                 'total_expenses' => $totalExpenses,
-                'highest_expense' => $highestExpense->amount,
+                'highest_expense' => $highestExpenseAmount,
                 'total_this_month' => $totalthisMonth,
                 'recent_expenses' => ExpenseResource::collection($recentExpenses)
             ], 'Dashboard data fetched successfully');
         } catch (Exception $e) {
             return ApiResponse::error($e->getMessage());
         }
-
-        
-
-        
     }
 }
