@@ -19,6 +19,7 @@ const initialState = {
   recentExpenses: [],
   loading: false,
   error: null,
+  dataFetched: false, // Track if data has been fetched at least once
 };
 
 const dashboardSlice = createSlice({
@@ -74,6 +75,7 @@ const dashboardSlice = createSlice({
         state.highestExpense = action.payload.highest_expense;
         state.totalThisMonth = action.payload.total_this_month;
         state.recentExpenses = action.payload.recent_expenses || [];
+        state.dataFetched = true; // Mark that data has been fetched
     });
 
     builder.addCase(getDashboard.rejected, (state, action) => {

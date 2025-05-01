@@ -62,6 +62,7 @@ const initialState = {
   group: [],
   loading: false,
   error: null,
+  dataFetched: false, // Track if data has been fetched at least once
 };
 
 const groupSlice = createSlice({
@@ -88,6 +89,7 @@ const groupSlice = createSlice({
     builder.addCase(getGroups.fulfilled, (state, action) => {
       state.loading = false;
       state.groups = action.payload.groups;
+      state.dataFetched = true; // Mark that data has been fetched
     });
 
     builder.addCase(getGroups.rejected, (state, action) => {

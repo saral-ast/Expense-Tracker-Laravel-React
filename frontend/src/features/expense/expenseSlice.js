@@ -44,6 +44,7 @@ const initialState = {
   expense: [],
   loading: false,
   error: null,
+  dataFetched: false, // Track if data has been fetched at least once
 };
 
 const expenseSlice = createSlice({
@@ -70,6 +71,7 @@ const expenseSlice = createSlice({
     builder.addCase(getExpenses.fulfilled, (state, action) => {
       state.loading = false;
       state.expenses = action.payload.expenses;
+      state.dataFetched = true; // Mark that data has been fetched
     });
 
     builder.addCase(getExpenses.rejected, (state, action) => {

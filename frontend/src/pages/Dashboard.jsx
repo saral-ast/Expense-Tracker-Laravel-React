@@ -36,23 +36,34 @@ const Dashboard = () => {
   // Loading state combined
   const loading = dashboardLoading || expenseLoading || groupLoading;
 
+  // Get dataFetched flags from each slice outside useEffect
+  const dashboardDataFetched = useSelector((state) => state.dashboard.dataFetched);
+  const expenseDataFetched = useSelector((state) => state.expense.dataFetched);
+  const groupDataFetched = useSelector((state) => state.group.dataFetched);
+  
   useEffect(() => {
-    // Only fetch dashboard data if we don't have any data yet
-      if(totalExpenses === 0 && !recentExpenses.length) {
-        console.log("Fetching dashboard data..." , totalExpenses, recentExpenses, highestExpense, totalThisMonth);
-        dispatch(getDashboard());
-      }
-
+    // Only fetch dashboard data if it hasn't been fetched yet in this session
+    if (!dashboardDataFetched) {
+      console.log("Fetching dashboard data...");
+      dispatch(getDashboard());
+    }
     
-    if (!expenses) {
+    // Only fetch expenses if they haven't been fetched yet in this session
+    if (!expenseDataFetched) {
+      console.log("Fetching expenses data...");
       dispatch(getExpenses());
     }
     
-    if (!groups) {
+    // Only fetch groups if they haven't been fetched yet in this session
+    if (!groupDataFetched) {
+      console.log("Fetching groups data...");
       dispatch(getGroups());
     }
-    // Remove the problematic dependencies that cause re-renders
+    // Only include dispatch as a dependency to prevent infinite loops
   }, [dispatch]);
+
+
+
 
   const handleSort = (key) => {
     setSortConfig((prev) => ({
