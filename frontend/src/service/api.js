@@ -102,8 +102,6 @@ export const exportExpensesCSV = async (filters = {}) => {
 
 export const exportExpensesPDF = async (filters = {}) => {
   const queryParams = new URLSearchParams();
-
-  // Add any filters to the query parameters
   if (filters.userId) queryParams.append("user_id", filters.userId);
   if (filters.groupId) queryParams.append("group_id", filters.groupId);
   if (filters.startDate) queryParams.append("start_date", filters.startDate);
@@ -113,7 +111,15 @@ export const exportExpensesPDF = async (filters = {}) => {
     ? `?${queryParams.toString()}`
     : "";
 
-  return api.get(`/expenses/export-pdf${queryString}`);
+  const response = await api.get(`/expenses/export-pdf${queryString}`, {
+    responseType: "blob", // IMPORTANT
+  });
+
+  return response;
 };
+
+
+
+
 // Export Api
 // export const getApi = async () => api.get('/expnses/export');

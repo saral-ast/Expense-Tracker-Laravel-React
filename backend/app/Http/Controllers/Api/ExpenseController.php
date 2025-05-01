@@ -7,12 +7,14 @@ use App\Helper\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Expense\ExpenseRequest;
 use App\Http\Resources\ExpenseResource;
-use Barryvdh\DomPDF\PDF;
+// use Barryvdh\DomPDF\PDF;
 use Exception;
 use App\Exports\ExpensesExport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Response;
 
 
 
@@ -93,31 +95,29 @@ class ExpenseController extends Controller
     }
 
 
+ 
+
 
 public function exportPdf(Request $request)
 {
     try {
-        // Get expenses with filters similar to CSV export
         $expenses = auth()->user()->expenses()->with('group')->get();
         $totalAmount = $expenses->sum('amount');
-        
-        // Generate PDF
-        $pdf = PDF::loadView('expenses.pdf', [
+
+        $pdf = Pdf::loadView('expenses.pdf', [
             'expenses' => $expenses,
             'totalAmount' => $totalAmount
         ]);
-        
-        // Save PDF to storage
-        $fileName = 'expenses-' . now()->format('Y-m-d') . '.pdf';
-        $pdfPath = 'pdf/' . $fileName;
-        Storage::disk('public')->put($pdfPath, $pdf->output());
-        
-        return response()->json([
-            'success' => true,
-            'file_url' => asset('storage/' . $pdfPath)
+
+        return Response::make($pdf->output(), 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'attachment; filename="expenses_report.pdf"',
         ]);
     } catch (Exception $e) {
-        return ApiResponse::error($e->getMessage());
+        return response()->json([
+            'success' => false,
+            'message' => $e->getMessage()
+        ], 500);
     }
 }
 
