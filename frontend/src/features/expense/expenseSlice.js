@@ -15,8 +15,8 @@ export const getExpenses = createAsyncThunk("expense/getExpenses", async () => {
 // Add a new expense
 export const addExpense = createAsyncThunk(
   "expense/addExpense",
-  async ({ amount, category, description }) => {
-    const response = await createExpenseApi(amount, category, description);
+  async ({ name, amount, date, group_id }) => {
+    const response = await createExpenseApi(name, amount, date, group_id);
     return response.data.data;
   }
 );
@@ -24,8 +24,8 @@ export const addExpense = createAsyncThunk(
 // Update an existing expense
 export const updateExpense = createAsyncThunk(
   "expense/updateExpense",
-  async ({ id, amount, category, description }) => {
-    const response = await updateExpenseApi(id, amount, category, description);
+  async ({ id, name, amount, date, group_id }) => {
+    const response = await updateExpenseApi(id, name, amount, date, group_id);
     return response.data.data;
   }
 );
@@ -90,7 +90,7 @@ const expenseSlice = createSlice({
     builder.addCase(updateExpense.fulfilled, (state, action) => {
       state.loading = false;
       const index = state.expenses.findIndex(
-        (expense) => expense.id === action.payload.id
+        (expense) => expense.id === action.payload.expense.id
       );
       if (index !== -1) {
         state.expenses[index] = action.payload.expense;
@@ -104,12 +104,9 @@ const expenseSlice = createSlice({
 
     builder.addCase(deleteExpense.fulfilled, (state, action) => {
       state.loading = false;
-      const index = state.expenses.findIndex(
-        (expense) => expense.id === action.payload.expense.id
-      );
-      if (index !== -1) {
-        state.expenses.splice(index, 1);
-      }
+       state.expenses = state.expenses.filter((expense) => (
+        expense.id !== parseInt(action.payload.id)
+      ));
     });
 
     builder.addCase(deleteExpense.rejected, (state, action) => {

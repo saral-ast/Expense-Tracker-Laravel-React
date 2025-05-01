@@ -62,7 +62,7 @@ class ExpenseController extends Controller
             //code...
             $expense = auth()->user()->expenses()->findOrFail($id);
             $expense->delete();
-            return ApiResponse::success([], 'Expense deleted successfully');
+            return ApiResponse::success(['id' => $id], 'Expense deleted successfully');
         } catch (Exception $e) {
             //throw $th;
             return ApiResponse::error($e->getMessage());

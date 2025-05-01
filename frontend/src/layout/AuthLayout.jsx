@@ -8,7 +8,7 @@ function AuthLayout() {
   const isLoggedIn = useSelector(selectIsloogedIn);
   return isLoggedIn ? (
     <>
-    <Navbar/>
+      <Navbar/>
       <Outlet />
     </>
   ) : (

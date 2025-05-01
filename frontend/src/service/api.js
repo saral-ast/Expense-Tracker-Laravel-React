@@ -1,5 +1,6 @@
 import axios from "axios";
 import { Cookies } from "react-cookie";
+// Removed direct imports to break circular dependency
 
 const cookies = new Cookies();
 const api = axios.create({
@@ -27,15 +28,29 @@ api.interceptors.response.use(
       response.status === 200
     ) {
       const { token, user } = response.data.data;
-// Log the response data
+      // Log the response data
 
       cookies.set("token", token);
       cookies.set("user", JSON.stringify(user));
     }
-    //
     return response;
   },
   (error) => {
+    // Check if the error is due to authentication issues
+    if (error.response && 
+        (error.response.status === 401 || 
+         (error.response.data && error.response.data.message === "Unauthenticated."))
+    ) {
+      // Remove cookies directly to avoid circular dependency
+      cookies.remove("token");
+      cookies.remove("user");
+      
+      // Use dynamic import to avoid circular dependency
+     
+      
+      // Redirect to login page
+      window.location.href = "/login";
+    }
     return Promise.reject(error);
   }
 );
