@@ -73,7 +73,7 @@ const dashboardSlice = createSlice({
         state.totalExpenses = action.payload.total_expenses;
         state.highestExpense = action.payload.highest_expense;
         state.totalThisMonth = action.payload.total_this_month;
-        state.recentExpenses = action.payload.recent_expenses;
+        state.recentExpenses = action.payload.recent_expenses || [];
     });
 
     builder.addCase(getDashboard.rejected, (state, action) => {

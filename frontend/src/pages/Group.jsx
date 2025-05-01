@@ -18,11 +18,12 @@ const Group = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedGroup, setSelectedGroup] = useState(null);
+  
 
 
 
   useEffect(() => {
-    if (!groups.length) {
+    if (groups.length === 0) {
       dispatch(getGroups());
     }
   }, [dispatch]);
@@ -170,7 +171,7 @@ const Group = () => {
               </div>
             ))}
         </div>
-
+        {/* {consoleG} */}
         {groups && groups.length === 0 && (
           <div className="text-center py-8">
             <svg

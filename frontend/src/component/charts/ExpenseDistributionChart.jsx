@@ -10,7 +10,7 @@ const ExpenseDistributionChart = () => {
   const groups = useSelector((state) => state.group.groups);
 
   useEffect(() => {
-    if (expenses.length && groups.length) {
+    if (expenses.length > 0 && groups.length > 0) {
       // Group expenses by group_id and calculate total amount for each group
       const expensesByGroup = {};
       
