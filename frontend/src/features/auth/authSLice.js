@@ -44,7 +44,7 @@ const authSlice = createSlice({
       state.error = null;
     });
 
-    builder.addCase(registerUser.fulfilled, (state, action) => {
+    builder.addCase(registerUser.fulfilled, (state) => {
       state.loading = false;
       state.isLoggedIn = true;
     });
@@ -59,7 +59,7 @@ const authSlice = createSlice({
       state.loading = true;
       state.error = null;
     });
-    builder.addCase(loginUser.fulfilled, (state, action) => {
+    builder.addCase(loginUser.fulfilled, (state) => {
       state.loading = false;
       state.isLoggedIn = true;
     });
@@ -69,7 +69,7 @@ const authSlice = createSlice({
       state.loading = false;
       state.error = action.data.message;
     });
-    builder.addCase(logoutUser.fulfilled, (state, action) => {
+    builder.addCase(logoutUser.fulfilled, (state  ) => {
       state.loading = false;
       state.isLoggedIn = false;
        cookies.remove("token");

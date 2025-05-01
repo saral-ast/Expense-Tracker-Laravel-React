@@ -19,7 +19,9 @@ const Expense = () => {
   const [selectedExpense, setSelectedExpense] = useState(null);
 
   useEffect(() => {
+    if (!expenses.length) {
     dispatch(getExpenses());
+    }
   }, [dispatch]);
 
   const handleOpenModal = (expense = null) => {

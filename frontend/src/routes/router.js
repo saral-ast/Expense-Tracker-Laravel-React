@@ -2,7 +2,7 @@ import { createBrowserRouter } from "react-router";
 import GuestLayout from "../layout/GuestLayout";
 import AuthLayout from "../layout/AuthLayout";
 import SignUp from "../pages/Auth/SignUp";
-import Dahboard from "../pages/Dahboard";
+import Dashboard from "../pages/Dashboard";
 import Login from "../pages/Auth/Login";
 import Group from "../pages/Group";
 import Expense from "../pages/Expense";
@@ -26,7 +26,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        Component: Dahboard,
+        Component: Dashboard,
       },
       {
           path: "/groups",

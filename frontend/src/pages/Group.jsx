@@ -22,7 +22,9 @@ const Group = () => {
 
 
   useEffect(() => {
+    if (!groups.length) {
     dispatch(getGroups());
+    }
   }, [dispatch]);
 
   const handleOpenModal = (group = null) => {

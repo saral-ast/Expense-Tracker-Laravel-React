@@ -49,6 +49,8 @@ class ExpenseController extends Controller
             $validated = $request->validated();
             $expense = auth()->user()->expenses()->findOrFail($id);
             $expense->update($validated);
+            $expense->load('group');
+            
             return ApiResponse::success([
                 'expense' => ExpenseResource::make($expense)
             ], 'Expense updated successfully');

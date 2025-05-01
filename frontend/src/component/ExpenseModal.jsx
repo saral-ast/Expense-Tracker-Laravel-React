@@ -3,12 +3,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import { addExpense, updateExpense } from "../features/expense/expenseSlice";
 import { selectGroups, getGroups } from "../features/group/groupSlice";
+import { compose } from "@reduxjs/toolkit";
 
 const ExpenseModal = ({ isOpen, onClose, expense = null }) => {
   const dispatch = useDispatch();
   const groups = useSelector(selectGroups);
   const isEditMode = !!expense;
 
+  console.log("ExpenseModal groups", groups);
   // Get today's date in YYYY-MM-DD format
   const getCurrentDate = () => {
     const today = new Date();
@@ -32,10 +34,11 @@ const ExpenseModal = ({ isOpen, onClose, expense = null }) => {
 
   // Fetch groups when modal opens
   useEffect(() => {
-    if (isOpen) {
+    console.log("ExpenseModal useEffect", isOpen, groups.length);
+    if (isOpen && groups.length === 0) {
       dispatch(getGroups());
     }
-  }, [isOpen, dispatch]);
+  }, [isOpen, dispatch, groups.length]);
 
   // Reset form when modal opens or expense changes
   useEffect(() => {

@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getDashboard } from "../features/dashboard/dashboardSlice";
+import { getExpenses } from "../features/expense/expenseSlice";
+import { getGroups } from "../features/group/groupSlice";
+import ExpenseDistributionChart from "../component/charts/ExpenseDistributionChart";
+import MonthlyExpenseChart from "../component/charts/MonthlyExpenseChart";
+import TopExpensesChart from "../component/charts/TopExpensesChart";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
@@ -9,17 +14,35 @@ const Dashboard = () => {
     direction: "desc",
   });
 
+  // Dashboard data from dashboard slice
   const {
     totalExpenses,
     highestExpense,
     totalThisMonth,
     recentExpenses,
-    loading,
-    error,
+    loading: dashboardLoading,
+    error: dashboardError,
   } = useSelector((state) => state.dashboard);
 
+  const expenses = useSelector((state) => state.expense.expenses);
+  const groups = useSelector((state) => state.group.groups);
+
+  // Loading states from expense and group slices
+  const { loading: expenseLoading } = useSelector((state) => state.expense);
+  const { loading: groupLoading } = useSelector((state) => state.group);
+
+  // Loading state combined
+  const loading = dashboardLoading || expenseLoading || groupLoading;
+
   useEffect(() => {
+    // Fetch all required data
     dispatch(getDashboard());
+    if (!expenses.length) {
+      dispatch(getExpenses());
+    }
+    if (!groups.length) {
+      dispatch(getGroups());
+    }
   }, [dispatch]);
 
   const handleSort = (key) => {
@@ -29,19 +52,21 @@ const Dashboard = () => {
     }));
   };
 
-  const sortedExpenses = [...recentExpenses].sort((a, b) => {
-    if (sortConfig.key === "amount") {
-      return sortConfig.direction === "asc"
-        ? a.amount - b.amount
-        : b.amount - a.amount;
-    }
-    if (sortConfig.key === "date") {
-      return sortConfig.direction === "asc"
-        ? new Date(a.date) - new Date(b.date)
-        : new Date(b.date) - new Date(a.date);
-    }
-    return 0;
-  });
+  const sortedExpenses = recentExpenses && recentExpenses.length > 0 
+    ? [...recentExpenses].sort((a, b) => {
+        if (sortConfig.key === "amount") {
+          return sortConfig.direction === "asc"
+            ? a.amount - b.amount
+            : b.amount - a.amount;
+        }
+        if (sortConfig.key === "date") {
+          return sortConfig.direction === "asc"
+            ? new Date(a.date) - new Date(b.date)
+            : new Date(b.date) - new Date(a.date);
+        }
+        return 0;
+      })
+    : [];
 
   if (loading) {
     return (
@@ -54,10 +79,10 @@ const Dashboard = () => {
     );
   }
 
-  if (error) {
+  if (dashboardError) {
     return (
       <div className="text-center mt-12 text-red-500 text-base font-medium">
-        Error: {error}
+        Error: {dashboardError}
       </div>
     );
   }
@@ -66,9 +91,10 @@ const Dashboard = () => {
     <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         <h1 className="text-3xl font-bold text-indigo-600 mb-8 text-center">
-          Dashboard Overview
+          Expense Dashboard
         </h1>
 
+        {/* Summary Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
           {/* Total Expenses */}
           <div className="p-6 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200">
@@ -158,6 +184,19 @@ const Dashboard = () => {
           </div>
         </div>
 
+        {/* Charts Section */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-10">
+          <div className="bg-white p-6 rounded-xl shadow-sm">
+            <ExpenseDistributionChart />
+          </div>
+          <div className="bg-white p-6 rounded-xl shadow-sm">
+            <MonthlyExpenseChart />
+          </div>
+          <div className="bg-white p-6 rounded-xl shadow-sm lg:col-span-2">
+            <TopExpensesChart />
+          </div>
+        </div>
+
         {/* Recent Expenses Table */}
         <div className="bg-white p-6 rounded-xl shadow-sm">
           <h2 className="text-xl font-semibold text-gray-900 mb-4">
@@ -180,6 +219,9 @@ const Dashboard = () => {
                         </span>
                       )}
                     </th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                      Name
+                    </th>
                     <th
                       onClick={() => handleSort("date")}
                       className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider cursor-pointer"
@@ -190,6 +232,9 @@ const Dashboard = () => {
                           {sortConfig.direction === "asc" ? "↑" : "↓"}
                         </span>
                       )}
+                    </th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                      Group
                     </th>
                   </tr>
                 </thead>
@@ -203,11 +248,17 @@ const Dashboard = () => {
                         ${expense.amount}
                       </td>
                       <td className="px-4 py-3 text-sm text-gray-900">
+                        {expense.name}
+                      </td>
+                      <td className="px-4 py-3 text-sm text-gray-900">
                         {new Date(expense.date).toLocaleDateString("en-US", {
                           month: "short",
                           day: "2-digit",
                           year: "numeric",
                         })}
+                      </td>
+                      <td className="px-4 py-3 text-sm text-gray-900">
+                        {expense.group?.name || "-"}
                       </td>
                     </tr>
                   ))}
