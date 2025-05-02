@@ -11,10 +11,11 @@ class ApiResponse{
             ],200);
     }
 
-    public static function error($message = ""){
-         return response()->json([
-                "type"  =>  "error",
-                "message"   =>  $message
-            ],400);
+    public static function error($message = "",$errors = []){
+          return response()->json([
+            "type"    => "error",
+            "message" => $message,
+            "errors"  => $errors
+        ], 400);
     }
 }

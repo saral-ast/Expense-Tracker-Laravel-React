@@ -28,10 +28,4 @@ class GrupRequest extends FormRequest
             // 'user_id' => 'required|exists:users,id',
         ];
     }
-    protected function failedValidation(Validator $validator)
-    {
-        throw new HttpResponseException(
-            ApiResponse::error($validator->errors()->first())
-        );
-    }
 }

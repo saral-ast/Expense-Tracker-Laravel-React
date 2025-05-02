@@ -1,14 +1,19 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import { NavLink, useNavigate } from "react-router"; // Corrected import
-import { useDispatch } from "react-redux";
+import { NavLink, useNavigate } from "react-router"; // ✅ Correct import
+import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "../../features/auth/authSLice";
 import Input from "../../component/Input";
 import Button from "../../component/Button";
+import { selectIsloogedIn } from "../../features/auth/authSLice"; // optional
 
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  // ✅ Get error from Redux state
+  const authError = useSelector((state) => state.auth.error);
+
   const {
     register,
     handleSubmit,
@@ -16,12 +21,13 @@ const Login = () => {
   } = useForm();
 
   const onSubmit = async (data) => {
-    try {
-     dispatch(loginUser(data));
+    const result = await dispatch(loginUser(data));
+
+    // ✅ Only navigate on success
+    if (loginUser.fulfilled.match(result)) {
       navigate("/");
-    } catch (error) {
-      console.error("Login failed:", error);
     }
+    form.reset(); // Reset the form after submission
   };
 
   return (
@@ -34,6 +40,11 @@ const Login = () => {
         <h2 className="text-3xl font-bold text-center text-indigo-600">
           Welcome Back
         </h2>
+
+        {/* ✅ Global error from Redux */}
+        {authError && (
+          <p className="text-red-500 text-sm text-center">{authError}</p>
+        )}
 
         <Input
           label="Email"

@@ -7,7 +7,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Group\GrupRequest;
 use App\Http\Resources\GroupResource;
 use Exception;
-use Illuminate\Http\Request;
 
 class GroupController extends Controller
 {

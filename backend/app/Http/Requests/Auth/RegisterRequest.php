@@ -31,10 +31,4 @@ class RegisterRequest extends FormRequest
         ];
     }
 
-     protected function failedValidation(Validator $validator)
-    {
-        throw new HttpResponseException(
-            ApiResponse::error($validator->errors()->first())
-        );
-    }
 }
