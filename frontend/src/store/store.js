@@ -5,13 +5,12 @@ import groupReducer from  '../features/group/groupSlice'
 import expenseReducer from '../features/expense/expenseSlice'
 
 const store = configureStore({
-    reducer: {
-        auth : authReducer, 
-        dashboard: dashboardReducer,   
-        group: groupReducer,
-        expense: expenseReducer,
-    }, // Add your reducers here
+  reducer: {
+    auth : authReducer,
+    dashboard: dashboardReducer,
+    group: groupReducer,
+    expense: expenseReducer,
+  }, // Add your reducers here
+});
 
-});   
-
-export default store;
+export default store;  

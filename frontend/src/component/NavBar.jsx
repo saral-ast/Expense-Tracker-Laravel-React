@@ -4,6 +4,10 @@ import { NavLink, useNavigate } from "react-router";
 import { selectIsloogedIn } from "../features/auth/authSLice";
 import { logoutUser } from "../features/auth/authSLice";
 import { Cookies } from "react-cookie";
+import { reset as resetAuth } from "../features/auth/authSLice";
+import { reset as resetDashboard } from "../features/dashboard/dashboardSlice";
+import { reset as resetGroup } from "../features/group/groupSlice";
+import { reset as resetExpense } from "../features/expense/expenseSlice";
 
 const Navbar = () => {
   const isLoggedIn = useSelector(selectIsloogedIn);
@@ -16,6 +20,10 @@ const Navbar = () => {
   const handleLogout = () => {
     dispatch(logoutUser());
     cookies.remove("user");
+    dispatch(resetAuth());
+    dispatch(resetDashboard());
+    dispatch(resetGroup());
+    dispatch(resetExpense());
     navigate("/login");
   };
 
@@ -168,14 +176,16 @@ const Navbar = () => {
                   to="/groups"
                   className="block py-2 px-4 text-gray-700 hover:bg-gray-100"
                   onClick={() => setIsMobileMenuOpen(false)}
-                >Groups</NavLink>
+                >
+                  Groups
+                </NavLink>
                 <NavLink
                   to="/expenses"
                   className="block py-2 px-4 text-gray-700 hover:bg-gray-100"
-                  onClick={() => setIsMobileMenuOpen(false)}>
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
                   Expenses
-                  </NavLink>
-                  
+                </NavLink>
 
                 <button
                   onClick={() => {

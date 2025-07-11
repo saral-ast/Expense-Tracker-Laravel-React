@@ -79,6 +79,7 @@ const groupSlice = createSlice({
         state.group = null;
       }
     },
+    reset: () => initialState,
   },
   extraReducers: (builder) => {
     builder.addCase(getGroups.pending, (state) => {
@@ -140,7 +141,7 @@ const groupSlice = createSlice({
 });
 
 
-export const { getGroup } = groupSlice.actions;
+export const { getGroup, reset } = groupSlice.actions;
 export const selectGroups = (state) => state.group.groups;
 export const selectGroup = (state) => state.group.group;
 export const selectLoading = (state) => state.group.loading;

@@ -61,6 +61,7 @@ const expenseSlice = createSlice({
         state.expense = null;
       }
     },
+    reset: () => initialState,
   },
   extraReducers: (builder) => {
     builder.addCase(getExpenses.pending, (state) => {
@@ -121,7 +122,7 @@ const expenseSlice = createSlice({
   },
 });
 
-export const { getExpense } = expenseSlice.actions;
+export const { getExpense, reset } = expenseSlice.actions;
 
 export const selectExpenses = (state) => state.expense.expenses;
 export const selectExpense = (state) => state.expense.expense;

@@ -20,8 +20,10 @@ const SignUp = () => {
 
   const onSubmit = async (data) => {
     try {
-      await dispatch(registerUser(data)).unwrap();
-      navigate("/");
+      const response = await dispatch(registerUser(data)).unwrap();
+      console.log(response)
+      
+      
     } catch (error) {
       console.error("Registration failed:", error);
     }

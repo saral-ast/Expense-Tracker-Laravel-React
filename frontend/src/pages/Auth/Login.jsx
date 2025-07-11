@@ -27,7 +27,7 @@ const Login = () => {
     if (loginUser.fulfilled.match(result)) {
       navigate("/");
     }
-    form.reset(); // Reset the form after submission
+    
   };
 
   return (

@@ -26,6 +26,8 @@ const Dashboard = () => {
     error: dashboardError,
   } = useSelector((state) => state.dashboard);
 
+  console.log(totalExpenses,highestExpense,totalExpenses,recentExpenses)
+
   const expenses = useSelector((state) => state.expense.expenses);
   const groups = useSelector((state) => state.group.groups);
 
@@ -46,6 +48,7 @@ const Dashboard = () => {
     if (!dashboardDataFetched) {
       console.log("Fetching dashboard data...");
       dispatch(getDashboard());
+      console.log(totalExpenses, " ", highestExpense, " ", totalThisMonth)
     }
     
     // Only fetch expenses if they haven't been fetched yet in this session
@@ -146,7 +149,7 @@ const Dashboard = () => {
                   Total Expenses
                 </h2>
                 <p className="text-2xl font-semibold text-gray-900">
-                  ${totalExpenses}
+                  ${totalExpenses || 0} 
                 </p>
               </div>
             </div>
@@ -175,7 +178,7 @@ const Dashboard = () => {
                   Highest Expense
                 </h2>
                 <p className="text-2xl font-semibold text-gray-900">
-                  ${highestExpense}
+                  ${highestExpense || 0} 
                 </p>
               </div>
             </div>
@@ -201,10 +204,10 @@ const Dashboard = () => {
               </div>
               <div>
                 <h2 className="text-sm font-medium text-indigo-600">
-                  Total This Month
+                  Total This Month 
                 </h2>
                 <p className="text-2xl font-semibold text-gray-900">
-                  ${totalThisMonth}
+                  ${totalThisMonth || 0}
                 </p>
               </div>
             </div>

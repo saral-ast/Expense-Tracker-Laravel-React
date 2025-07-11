@@ -59,7 +59,8 @@ const dashboardSlice = createSlice({
           );
         }
       }
-    }
+    },
+    reset : () => initialState
   },
   extraReducers: (builder) => {
     builder.addCase(getDashboard.pending, (state) => {
@@ -113,6 +114,7 @@ const dashboardSlice = createSlice({
       
       // Find the expense in recentExpenses
       const index = state.recentExpenses.findIndex(exp => exp.id === updatedExpense.id);
+
       
       if (index !== -1) {
         // Calculate the difference in amount
@@ -123,9 +125,12 @@ const dashboardSlice = createSlice({
         // Update total expenses
         state.totalExpenses += amountDifference;
         
-        // Update highest expense if needed
-        if (newAmount > state.highestExpense) {
-          state.highestExpense = newAmount;
+        // Update if highest expense is updated
+        if (newAmount >= state.highestExpense) {
+          state.highestExpense = state.recentExpenses.reduce(
+            (max, exp) => Math.max(max, parseFloat(exp.amount)),
+            0
+          );
         }
         
         // Check if expense is from current month and update totalThisMonth
@@ -167,6 +172,13 @@ const dashboardSlice = createSlice({
         
         // Update total expenses
         state.totalExpenses -= amount;
+        // Update if highest expense is deleted
+        if (amount === state.highestExpense) {
+          // Find the new highest expense
+          state.highestExpense = state.recentExpenses.reduce(
+            (max, exp) => Math.max(max, parseFloat(exp.amount)), 0
+          );
+        }
         
         // Check if expense is from current month and update totalThisMonth
         const currentDate = new Date();
@@ -192,7 +204,7 @@ const dashboardSlice = createSlice({
 });
 
 // Export the custom reducer action
-export const { expenseDeleted } = dashboardSlice.actions;
+export const { expenseDeleted, reset } = dashboardSlice.actions;
 export default dashboardSlice.reducer;
 
 
